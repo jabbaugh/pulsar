@@ -140,3 +140,13 @@ The U.S. Government Department of Commerce, Bureau of Industry and Security (BIS
 
 The following provides more details on the included cryptographic software: Pulsar uses the SSL library from Bouncy Castle written by http://www.bouncycastle.org.
 
+
+### JBaugh Non-Root Information
+To build a non-root version of the image.
+- Maven install the project: ```mvn clean install -Pdocker -DskipTests```
+
+Verify the docker image was created
+This should be under apachepulsar/pulsar-all:2.5.2
+
+Tag the image with an odc path. 
+```docker tag apachepulsar/pulsar-all:2.5.2 containers.oracledatacloud.com/fulfillment/pulsar-all:2.5.2-nonroot```

@@ -51,13 +51,17 @@ RUN apt-get update \
      && apt-get clean \
      && rm -rf /var/lib/apt/lists/*
 
+RUN adduser -q --disabled-password --disabled-login pulsar
+RUN mkdir -p /pulsar/data && chown 1000:1000 /pulsar/data
+RUN mkdir -p /pulsar/conf && chown 1000:1000 /pulsar/conf
+
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 RUN python2.7 get-pip.py
 RUN python3.7 get-pip.py
 
 ADD target/python-client/ /pulsar/pulsar-client
 ADD target/cpp-client/ /pulsar/cpp-client
-RUN /pulsar/bin/install-pulsar-client-27.sh
+# RUN /pulsar/bin/install-pulsar-client-27.sh
 RUN /pulsar/bin/install-pulsar-client-37.sh
 RUN echo networkaddress.cache.ttl=1 >> $JAVA_HOME/jre/lib/security/java.security
 RUN apt-get update \
@@ -67,6 +71,9 @@ RUN apt-get update \
 
 WORKDIR /pulsar
 
+RUN chown -R 1000:1000 /pulsar/
+
 VOLUME  ["/pulsar/conf", "/pulsar/data"]
 
+USER 1000
 ENV PULSAR_ROOT_LOGGER=INFO,CONSOLE
